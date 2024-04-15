@@ -1,9 +1,17 @@
 from board import Board
+from game_loader import Loader
+import random as rd
 
 
 class Game:
     def __init__(self):
+        self.running = None
         self.board = Board()
+        self.loader = Loader()
+        self.init()
+        
+    def init(self):
+        self.board.set_board(self.loader.get_game(rd.randint(0, self.loader.get_games_count()-1)))
         self.running = False
 
     def start(self):
@@ -29,10 +37,13 @@ class Game:
         except ValueError:
             print("Numbers must be numbers")
             return
-        for number in [num, col, row]:
+        for number in [col, row]:
             if not number or number > 9:
-                print("All numbers must be 1-9")
+                print("Coordinate numbers must be 1-9")
                 return
+        if num > 9:
+            print("Number placed must be 0-9")
+            return
         col -= 1
         row -= 1
         self.board.place_square(num, col, row)
